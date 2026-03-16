@@ -11,7 +11,7 @@ Run: source /opt/venv/bin/activate && python3 examples/state_machine_demo.py
 import sys
 import os
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
 
 from orchestrator.domain.states import (
     StateMachine,

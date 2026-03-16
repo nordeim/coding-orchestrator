@@ -11,7 +11,7 @@ Run: source /opt/venv/bin/activate && python3 examples/decompose_task.py
 import sys
 import os
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
 
 from orchestrator.tasks.entity import TaskEntity, TaskPriority, TaskEstimate
 from orchestrator.tasks.complexity import ComplexityAnalyzer
@@ -28,6 +28,9 @@ def demo_microservice():
         title="Build user authentication microservice",
         description="Create a standalone microservice with REST API, JWT authentication, and PostgreSQL database",
         priority=TaskPriority.HIGH,
+        estimate=TaskEstimate(
+            optimistic_hours=8, likely_hours=20, pessimistic_hours=40
+        ),
     )
 
     print(f"\n📋 Original Task: {task.title}")
@@ -62,6 +65,9 @@ def demo_crud():
     task = TaskEntity(
         title="Create product management CRUD",
         description="Build CRUD API endpoints for product management with create, read, update, delete operations",
+        estimate=TaskEstimate(
+            optimistic_hours=4, likely_hours=12, pessimistic_hours=24
+        ),
     )
 
     print(f"\n📋 Original Task: {task.title}")
@@ -91,6 +97,9 @@ def demo_ui_component():
     task = TaskEntity(
         title="Build user profile page component",
         description="Create a React component for user profile with avatar, settings form, and activity feed",
+        estimate=TaskEstimate(
+            optimistic_hours=4, likely_hours=10, pessimistic_hours=20
+        ),
     )
 
     print(f"\n📋 Original Task: {task.title}")
@@ -120,6 +129,9 @@ def demo_security():
     task = TaskEntity(
         title="Implement OAuth2 authentication",
         description="Add OAuth2 login with Google and GitHub providers, JWT tokens, and RBAC authorization",
+        estimate=TaskEstimate(
+            optimistic_hours=6, likely_hours=16, pessimistic_hours=32
+        ),
     )
 
     print(f"\n📋 Original Task: {task.title}")
