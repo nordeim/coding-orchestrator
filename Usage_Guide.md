@@ -154,6 +154,8 @@ pending → ready → in_progress → completed
 | CRUD | 8 | "Create product management CRUD" |
 | UI Component | 7 | "Build user profile page component" |
 | Security | 7 | "Implement OAuth2 authentication" |
+| API | 6 | "Create REST API for user management" |
+| Refactor | 6 | "Refactor authentication module" |
 
 ### 4. Complexity Analysis
 

@@ -1,6 +1,8 @@
 # Orchestrator Toolkit
 
-A pure-Python orchestration toolkit built from patterns extracted from the OpenCode Industrial Orchestrator. This toolkit provides:
+A pure-Python orchestration toolkit built from patterns extracted from the OpenCode Industrial Orchestrator.
+
+This toolkit provides:
 
 - **Task Management**: Hierarchical tasks with state machines, dependencies, and progress tracking
 - **Complexity Analysis**: Heuristic-based task complexity scoring and capability inference
@@ -51,7 +53,6 @@ task = TaskEntity(
 # Decompose into subtasks
 decomposer = TaskDecompositionService()
 result = decomposer.decompose(task)
-
 print(f"Decomposed into {result.subtask_count} subtasks:")
 for child in task.children:
     print(f" - {child.title}")
@@ -69,7 +70,8 @@ orchestrator/
 ├── tasks/            # Task management
 │   ├── entity.py     # TaskEntity (hierarchy, DAG deps, progress)
 │   ├── complexity.py # ComplexityAnalyzer (keyword-based heuristics)
-│   └── decomposition.py # TaskDecompositionService (pattern-based)
+│   ├── decomposition.py # TaskDecompositionService (pattern-based)
+│   └── templates.py  # TemplateRegistry (6 templates: microservice, crud, ui_component, security, api, refactor)
 │
 ├── recovery/         # Recovery mechanisms
 │   ├── checkpoint.py # CheckpointMixin for resume-from-failure
@@ -116,12 +118,23 @@ task.complete(result={"endpoints": 5})
 
 ### Decomposition
 
-Pattern-based task breakdown:
+Pattern-based task breakdown via integrated TemplateRegistry:
 
-- **Microservice**: 8 subtasks (API contract → data model → business logic → endpoints → auth → tests → observability)
-- **CRUD**: 8 subtasks (schema → repository → CRUD endpoints → validation → tests)
-- **UI Component**: 7 subtasks (design → structure → styling → state → interactions → tests → accessibility)
-- **Security**: 7 subtasks (threat model → auth flow → implementation → RBAC → protection → audit → tests)
+| Template | Subtasks | Description |
+|----------|----------|-------------|
+| **Microservice** | 8 | API contract → data model → business logic → endpoints → auth → tests → observability |
+| **CRUD** | 8 | schema → repository → CRUD endpoints → validation → tests |
+| **UI Component** | 7 | design → structure → styling → state → interactions → tests → accessibility |
+| **Security** | 7 | threat model → auth flow → implementation → RBAC → protection → audit → tests |
+| **API** | 6 | specification → validation → business logic → error handling → tests → documentation |
+| **Refactor** | 6 | analysis → tests → extract interfaces → migrate → validate → documentation |
+
+```python
+from orchestrator.tasks.decomposition import TaskDecompositionService
+
+decomposer = TaskDecompositionService()
+print(decomposer.available_templates())  # ['microservice', 'crud', 'ui_component', 'security', 'api', 'refactor']
+```
 
 ### Health Scoring
 

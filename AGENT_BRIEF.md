@@ -126,23 +126,29 @@ print(result.capabilities_required)  # ['backend_api', 'caching']
 
 ### 4. Task Decomposition (`tasks/decomposition.py`)
 
-Pattern-based task breakdown:
+Pattern-based task breakdown with integrated TemplateRegistry:
 
 - **Rule matching** — Regex patterns to identify task types
-- **Template decomposition** — Pre-built templates for:
-  - Microservice (8 subtasks: API contract → data model → business logic → endpoints → auth → tests → observability)
-  - CRUD (8 subtasks: schema → repository → CRUD endpoints → validation → tests)
-  - UI Component (7 subtasks: design → structure → styling → state → interactions → tests → accessibility)
-  - Security (7 subtasks: threat model → auth flow → implementation → RBAC → protection → audit → tests)
+- **TemplateRegistry integration** — Checks templates.py first, falls back to DEFAULT_RULES
+- **Pre-built templates**:
+  - Microservice (8 subtasks): API contract → data model → business logic → endpoints → auth → tests → observability
+  - CRUD (8 subtasks): schema → repository → CRUD endpoints → validation → tests
+  - UI Component (7 subtasks): design → structure → styling → state → interactions → tests → accessibility
+  - Security (7 subtasks): threat model → auth flow → implementation → RBAC → protection → audit → tests
+  - API (6 subtasks): specification → validation → business logic → error handling → tests → documentation
+  - Refactor (6 subtasks): analysis → tests → extract interfaces → migrate → validate → documentation
 - **Dependency resolution** — Automatically sets up subtask dependencies
 
 ```python
 from orchestrator.tasks.decomposition import TaskDecompositionService
 
 decomposer = TaskDecompositionService()
+print(decomposer.available_templates())  # ['microservice', 'crud', 'ui_component', 'security', 'api', 'refactor']
+
 task = TaskEntity(title="Build user management microservice")
 result = decomposer.decompose(task)
 print(f"Created {result.subtask_count} subtasks")
+print(f"Used TemplateRegistry: {result.used_template_registry}")
 ```
 
 ### 5. Checkpoint Recovery (`recovery/checkpoint.py`)
@@ -350,7 +356,7 @@ This toolkit is a **distillation** of `/home/project/opencode-industrial-orchest
 
 ## 📋 Current Status
 
-**Phase 6 COMPLETE ✅** — All planned phases implemented and tested.
+**Phase 7 COMPLETE ✅** — All planned phases implemented and tested.
 
 | Phase | Description | Status | Tests |
 |-------|-------------|--------|-------|
@@ -360,11 +366,14 @@ This toolkit is a **distillation** of `/home/project/opencode-industrial-orchest
 | 4 | Decomposition | ✅ | 21 |
 | 5 | Recovery & Health | ✅ | 26 |
 | 6 | Storage | ✅ | 12 |
-| 7 | Examples & Documentation | 🔄 | — |
+| 7 | Examples & Documentation | ✅ | 3 examples + SKILL.md |
 
-**Next Steps:**
-- Complete Phase 7: Documentation polish, more examples
-- Consider: Add skill file for AI agent integration
+**Phase 7 Deliverables:**
+- `examples/decompose_task.py` (7,644 bytes)
+- `examples/state_machine_demo.py` (9,873 bytes)
+- `examples/basic_usage.py` (3,513 bytes)
+- `skills/coding-orchestrator/SKILL.md` (3,331 bytes)
+- `tasks/templates.py` (9,225 bytes) — TemplateRegistry with 6 templates
 
 ---
 
