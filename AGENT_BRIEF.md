@@ -131,6 +131,8 @@ Pattern-based task breakdown with integrated TemplateRegistry:
 
 - **Rule matching** — Regex patterns to identify task types
 - **TemplateRegistry integration** — Checks templates.py first, falls back to DEFAULT_RULES
+  - **Fallback behavior:** When `decompose()` is called, it matches the task against regex patterns in DEFAULT_RULES, then checks if a template exists in TemplateRegistry (via `has_template(rule_name)`). Only if no template is found does it use the rule's `decompose_fn`.
+  - **Note:** The `api` and `refactor` rules define `decompose_fn=_decompose_generic` as fallback, but TemplateRegistry has full implementations for both, so the fallback rarely triggers.
 - **Pre-built templates**:
   - Microservice (8 subtasks): API contract → data model → business logic → endpoints → auth → tests → observability
   - CRUD (8 subtasks): schema → repository → CRUD endpoints → validation → tests

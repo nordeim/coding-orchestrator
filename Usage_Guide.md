@@ -493,6 +493,58 @@ The `JsonStore` is a lightweight serialization layer with specific design choice
 2.  **Hierarchy is Flat on Load**: While `JsonStore` saves child relationships, it does not automatically re-hydrate the `children` list with actual `TaskEntity` objects. It populates `_stored_children_ids`. You must manually load and link children if the full object tree is required in memory.
 3.  **No Concurrency**: `JsonStore` is not thread-safe and is designed for single-user, single-process workloads.
 
+#### Reconstructing Hierarchies After Load
+
+When loading a parent task with children, you must manually rebuild the object hierarchy:
+
+```python
+# Save parent and children separately
+store.save(parent_task)
+for child in parent_task.children:
+    store.save(child)
+
+# Load and reconstruct
+loaded = store.load(str(parent_task.id))
+
+# Rebuild hierarchy from stored IDs
+for child_id in loaded._stored_children_ids:
+    child = store.load(child_id)
+    if child:
+        loaded.add_child(child)
+
+# Restore status manually (JsonStore doesn't restore state)
+if loaded.status == "pending" and was_previously_in_progress:
+    loaded.start()  # Resume from where you left off
+```
+
+**Alternative pattern using checkpoints for stateful persistence:**
+
+```python
+from orchestrator.recovery.checkpoint import CheckpointMixin
+
+class PersistentWorkflow(CheckpointMixin):
+    def save_state(self, store, task):
+        store.save(task)
+        self.checkpoint("saved", {"task_id": str(task.id), "status": task.status})
+    
+    def restore_state(self, store, task_id):
+        task = store.load(task_id)
+        checkpoint = self.restore_from_checkpoint()
+        
+        if checkpoint and checkpoint["step"] == "saved":
+            # Restore hierarchy
+            for child_id in task._stored_children_ids:
+                child = store.load(child_id)
+                if child:
+                    task.add_child(child)
+            
+            # Restore status if was in progress
+            if checkpoint["data"]["status"] == "in_progress":
+                task.start()
+        
+        return task
+```
+
 ---
 
 ## Component Deep Dives
