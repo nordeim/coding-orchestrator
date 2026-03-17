@@ -396,20 +396,34 @@ first_subtask.complete(result={
 progress = task.get_progress()
 print(f"Progress: {progress['progress_pct']:.1f}%")
 print(f"Completed: {progress['completed']}/{progress['total_subtasks']}")
+```
 
-# Check health
-from orchestrator.recovery.health import HealthScorer
+### Step 5.1: Standard Agent Execution Loop
 
-scorer = HealthScorer()
-health = scorer.score_task(task)
+For independent agents, use this pattern to programmatically drive the work through the entire task tree while respecting dependencies:
 
-print(f"Health: {health.status}")  # "healthy", "warning", "critical"
-print(f"Score: {health.overall_score:.2f}")
+```python
+# 1. Get the optimal execution order
+order = task.get_execution_order()
 
-if health.recommendations:
-    print("Recommendations:")
-    for rec in health.recommendations:
-        print(f"  - {rec}")
+# 2. Iterate and execute
+for subtask_id in order:
+    subtask = task.find_child(subtask_id)
+    if not subtask or subtask.status == "completed":
+        continue
+    
+    # 3. Handle status (Resume or Start)
+    if subtask.status == "pending":
+        subtask.start()
+    elif subtask.status == "paused":
+        subtask.resume()
+    
+    print(f"Executing: {subtask.title}")
+    
+    # ... Agent performs actual coding work here ...
+    
+    # 4. Finalize
+    subtask.complete(result={"output": "Verified code generated"})
 ```
 
 ### Step 6: Handle Interruptions
@@ -924,17 +938,20 @@ task = TaskEntity(
 task = TaskEntity(title="Implement caching", description="Add caching")
 ```
 
-### 3. Decompose Before Starting
+### 3. Decompose and Order Before Starting
 
 ```python
 # Good: Decompose first, then work
 task = TaskEntity(title="Build microservice", estimate=...)
 decomposer.decompose(task)  # Creates children
-task.start()  # Now start the parent
 
-# Work on children in order
-for child in task.children:
-    if child.status == "pending":
+# IMPORTANT: Always use the execution order from the DAG
+order = task.get_execution_order()
+
+# Work on children in the correct dependency order
+for child_id in order:
+    child = task.find_child(child_id)
+    if child and child.status == "pending":
         child.start()
         # ... do work ...
         child.complete()
