@@ -35,6 +35,7 @@ orchestrator/
 │   ├── entity.py     # TaskEntity (hierarchy, DAG deps, progress)
 │   ├── complexity.py # ComplexityAnalyzer (keyword-based heuristics)
 │   └── decomposition.py # TaskDecompositionService (pattern-based)
+│   └── templates.py           # TemplateRegistry (6 decomposition templates)
 │
 ├── recovery/         # 🔄 Recovery mechanisms
 │   ├── checkpoint.py # CheckpointMixin for resume-from-failure

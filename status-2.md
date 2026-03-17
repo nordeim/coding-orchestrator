@@ -260,3 +260,66 @@ The system is working! The error is now a proper Python import error, not a file
  The TemplateRegistry integration is working. The base_title extraction could be cleaner, but the functional integration is complete. 
 
 Let me update TODO.md to reflect the completion status:
+
+Now let me assess the current state of the documentation:Now let me check what was actually fixed vs what remains:The API and refactor templates ARE mentioned in all three docs. Let me verify the decomposition table in Usage_Guide.md:Excellent! The Usage_Guide.md already has the updated template table with API and Refactor. Let me check AGENT_BRIEF.md:Let me check if templates.py is in the architecture diagram:Good — templates.py IS mentioned. Let me check if the architecture diagram needs updating:I see the architecture diagram is missing templates.py in the tasks/ section. Let me check the full architecture section:The architecture diagram IS missing templates.py. Let me fix this:The file might have single-line formatting. Let me check:Good — it has proper line endings. Let me read the exact text around that section:Let me use sed to add the line: 
+
+The sed didn't work as expected. Let me try a different     
+ approach:Now templates.py is in the architecture diagram. Let me verify the update looks correct:The indentation is slightly off — templates.py should be nested under tasks/. Let me fix that:
+
+---
+
+ ORCHESTRATOR TOOLKIT: COMPLETE ✅                                                                                                                                                                                                          
+                                                                                                                                                                                                                                            
+ | Phase | Component | Status | Tests |                                                                                                                                                                                                     
+ |-------|-----------|--------|-- -----|                                                                                                                                                                                                    
+ | 1 | Domain (states, events, exceptions) | ✅ | 19 |                                                                                                                                                                                      
+ | 2 | Task Entity (hierarchy, DAG, PERT) | ✅ | 27 |                                                                                                                                                                                       
+ | 3 | Complexity Analyzer | ✅ | 14 |                                                                                                                                                                                                      
+ | 4 | Decomposition + TemplateRegistry | ✅ | 21 |                                                                                                                                                                                         
+ | 5 | Recovery & Health | ✅ | 26 |                                                                                                                                                                                                        
+ | 6 | JSON Storage | ✅ | 12 |                                                                                                                                                                                                             
+ | 7 | Examples + Documentation | ✅ | — |                                                                                                                                                                                                  
+ | Total | | ✅ | 119 |                                                                                                                                                                                                                     
+                                                                                                                                                                                                                                            
+ Key Files:                                                                                                                                                                                                                                 
+ - tasks/templates.py — 6 templates (microservice, crud, ui_component, security, api, refactor)                                                                                                                                             
+ - tasks/decomposition.py — Integrated TemplateRegistry with fallback                                                                                                                                                                       
+ - skills/coding-orchestrator/SKILL.md — Agent integration guide                                                                                                                                                                            
+                                                                                                                                                                                                                                            
+ Documentation:                                                                                                                                                                                                                             
+ - README.md ✅                                                                                                                                                                                                                             
+ - AGENT_BRIEF.md ✅ (just added templates.py to architecture)                                                                                                                                                                              
+ - Usage_Guide.md ✅                                                                                                                                                                                                                        
+                                                                                                                                                                                                                                            
+ What's Next? The toolkit is ready for use. Two KIV items from TODO.md:                                                                                                                                                                     
+ 1. Route cron jobs to cheaper models (cost savings)                                                                                                                                                                                        
+ 2. Add backup notification channel 
+
+---
+
+ I see there's already an orchestrator-toolkit directory in the skills path. Let me check its contents and compare against the current codebase:Two SKILL.md files exist:                                                                   
+ 1. /home/pete/.openclaw/workspace/skills/orchestrator-toolkit/SKILL.md — 5,557 bytes (Mar 16 15:01)                                                                                                                                        
+ 2. /home/pete/.openclaw/workspace/orchestrator/skills/coding-orchestrator/SKILL.md — 3,361 bytes (Mar 17 04:32)                                                                                                                            
+                                                                                                                                                                                                                                            
+ Let me compare them:I found two issues:                                                                                                                                                                                                    
+                                                                                                                                                                                                                                            
+ Issue 1: Two different SKILL.md files exist with different content                                                                                                                                                                         
+ Issue 2: The newer SKILL.md (in orchestrator/skills/) has outdated info (wrong enum name TaskComplexityLevel, only 5 templates listed, wrong state machine states)                                                                         
+                                                                                                                                                                                                                                            
+ Let me analyze both files and identify discrepancies:                                                                                                                                                                                      
+                                                                                                                                                                                                                                            
+ | Aspect | skills/orchestrator-toolkit/SKILL.md | orchestrator/skills/SKILL.md |                                                                                                                                                           
+ |------------------------------- -------|------------------------ ------|                                                                                                                                                                  
+ | Size | 5,557 bytes | 3,361 bytes |                                                                                                                                                                                                       
+ | Templates | Mentions 5 patterns | Lists 5 templates |                                                                                                                                                                                    
+ | Enum | Correct (TaskComplexity) | Wrong (TaskComplexityLevel) |                                                                                                                                                                          
+ | States | 10-state description | Wrong states (queued, accepted, etc.) |                                                                                                                                                                  
+ | Import paths | Correct (orchestrator.tasks.entity) | Wrong (tasks.entity) |                                                                                                                                                              
+                                                                                                                                                                                                                                            
+ Let me check the actual current state of the codebase:Now I have clear verification: - 6 templates: microservice, crud, ui_component, security, api, refactor - Correct enum: TaskComplexity (not TaskComplexityLevel) Let me check the    
+ state machine:Now I have the correct information. Let me create a comprehensive update plan:Now let me update the authoritative SKILL.md with accurate information:Now let me remove the redundant SKILL.md in the orchestrator project    
+ directory:Let me verify the final state:Now let me update the daily memory and provide a summary:SKILL.md CONSOLIDATION COMPLETE ✅ | Action | Status | |--------|--------| | Verified codebase (6 templates, correct enum, state machine) 
+ | ✅ | | Updated skills/orchestrator-toolkit/SKILL.md | ✅ | | Removed redundant orchestrator/skills/coding-orchestrator/ | ✅ | | Updated daily memory | ✅ | Summary of Changes: - Corrected: 6 templates (was 5) - Corrected:           
+ TaskComplexity enum (was TaskComplexityLevel) - Corrected: Import paths (orchestrator.tasks.*) - Corrected: State machine diagram (8 states) - Added: Complexity levels table - Added: File locations reference Single authoritative       
+ SKILL.md now at: /home/pete/.openclaw/workspace/skills/orchestrator-toolkit/SKILL.md (7,296 bytes, 204 lines)
+
