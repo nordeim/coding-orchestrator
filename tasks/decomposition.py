@@ -262,8 +262,15 @@ class TaskDecompositionService:
             if template_func:
                 # Use template from TemplateRegistry
                 subtasks = template_func(task)
+                
+                # Add children and set up sequential dependencies
+                prev_child = None
                 for child in subtasks:
                     task.add_child(child)
+                    if prev_child:
+                        # Each task depends on the previous one (sequential flow)
+                        child.add_dependency(prev_child.id, required=False)
+                    prev_child = child
                 
                 # Create dummy specs for result
                 specs = [SubtaskSpec(child.title, description=child.description) for child in subtasks]

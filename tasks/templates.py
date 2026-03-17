@@ -13,7 +13,7 @@ Template counts (aligned with decomposition.py DEFAULT_RULES):
 """
 
 from typing import List, Dict, Callable, Optional
-from tasks.entity import TaskEntity, TaskComplexityLevel
+from orchestrator.tasks.entity import TaskEntity
 
 
 class TemplateRegistry:
@@ -50,21 +50,21 @@ def microservice_template(task: TaskEntity) -> List[TaskEntity]:
     base_title = task.title.replace("Implement ", "").replace("Create ", "")
     return [
         TaskEntity(title=f"Design API contract for {base_title} (endpoints, request/response schemas)", 
-                   complexity=TaskComplexityLevel.MEDIUM),
-        TaskEntity(title=f"Define data model and database schema for {base_title}", 
-                   complexity=TaskComplexityLevel.MEDIUM),
-        TaskEntity(title=f"Implement core business logic / service layer for {base_title}", 
-                   complexity=TaskComplexityLevel.HIGH),
-        TaskEntity(title=f"Implement API endpoints with validation for {base_title}", 
-                   complexity=TaskComplexityLevel.MEDIUM),
-        TaskEntity(title=f"Add authentication and authorization to {base_title}", 
-                   complexity=TaskComplexityLevel.HIGH),
-        TaskEntity(title=f"Write unit tests for {base_title} service layer", 
-                   complexity=TaskComplexityLevel.MEDIUM),
-        TaskEntity(title=f"Write integration tests for {base_title} API endpoints", 
-                   complexity=TaskComplexityLevel.MEDIUM),
-        TaskEntity(title=f"Add logging, metrics, and health checks for {base_title}", 
-                   complexity=TaskComplexityLevel.LOW),
+                   metadata={"complexity": "moderate", "category": "design"}),
+        TaskEntity(title=f"Define data model and database schema for {base_title}",
+                   metadata={"complexity": "moderate", "category": "database"}),
+        TaskEntity(title=f"Implement core business logic / service layer for {base_title}",
+                   metadata={"complexity": "complex", "category": "backend"}),
+        TaskEntity(title=f"Implement API endpoints with validation for {base_title}",
+                   metadata={"complexity": "moderate", "category": "backend"}),
+        TaskEntity(title=f"Add authentication and authorization to {base_title}",
+                   metadata={"complexity": "complex", "category": "security"}),
+        TaskEntity(title=f"Write unit tests for {base_title} service layer",
+                   metadata={"complexity": "moderate", "category": "testing"}),
+        TaskEntity(title=f"Write integration tests for {base_title} API endpoints",
+                   metadata={"complexity": "moderate", "category": "testing"}),
+        TaskEntity(title=f"Add logging, metrics, and health checks for {base_title}",
+                   metadata={"complexity": "simple", "category": "observability"}),
     ]
 
 
@@ -75,22 +75,22 @@ def crud_template(task: TaskEntity) -> List[TaskEntity]:
     """
     base_title = task.title.replace("Implement ", "").replace("Create ", "").replace("CRUD for ", "")
     return [
-        TaskEntity(title=f"Define entity schema and validation rules for {base_title}", 
-                   complexity=TaskComplexityLevel.LOW),
-        TaskEntity(title=f"Implement repository/data access layer for {base_title}", 
-                   complexity=TaskComplexityLevel.MEDIUM),
-        TaskEntity(title=f"Create {base_title} POST endpoint (create)", 
-                   complexity=TaskComplexityLevel.LOW),
-        TaskEntity(title=f"Create {base_title} GET endpoints (read/list)", 
-                   complexity=TaskComplexityLevel.LOW),
-        TaskEntity(title=f"Create {base_title} PUT/PATCH endpoint (update)", 
-                   complexity=TaskComplexityLevel.LOW),
-        TaskEntity(title=f"Create {base_title} DELETE endpoint", 
-                   complexity=TaskComplexityLevel.LOW),
-        TaskEntity(title=f"Add input validation and error handling for {base_title}", 
-                   complexity=TaskComplexityLevel.MEDIUM),
-        TaskEntity(title=f"Write tests for all {base_title} CRUD operations", 
-                   complexity=TaskComplexityLevel.MEDIUM),
+        TaskEntity(title=f"Define entity schema and validation rules for {base_title}",
+                   metadata={"complexity": "simple", "category": "schema"}),
+        TaskEntity(title=f"Implement repository/data access layer for {base_title}",
+                   metadata={"complexity": "moderate", "category": "data"}),
+        TaskEntity(title=f"Create {base_title} POST endpoint (create)",
+                   metadata={"complexity": "simple", "category": "api"}),
+        TaskEntity(title=f"Create {base_title} GET endpoints (read/list)",
+                   metadata={"complexity": "simple", "category": "api"}),
+        TaskEntity(title=f"Create {base_title} PUT/PATCH endpoint (update)",
+                   metadata={"complexity": "simple", "category": "api"}),
+        TaskEntity(title=f"Create {base_title} DELETE endpoint",
+                   metadata={"complexity": "simple", "category": "api"}),
+        TaskEntity(title=f"Add input validation and error handling for {base_title}",
+                   metadata={"complexity": "moderate", "category": "validation"}),
+        TaskEntity(title=f"Write tests for all {base_title} CRUD operations",
+                   metadata={"complexity": "moderate", "category": "testing"}),
     ]
 
 
@@ -101,20 +101,20 @@ def ui_component_template(task: TaskEntity) -> List[TaskEntity]:
     """
     base_title = task.title.replace("Build ", "").replace("Create ", "")
     return [
-        TaskEntity(title=f"Design {base_title} component hierarchy and props interface", 
-                   complexity=TaskComplexityLevel.LOW),
-        TaskEntity(title=f"Implement {base_title} component structure and layout", 
-                   complexity=TaskComplexityLevel.MEDIUM),
-        TaskEntity(title=f"Add styling for {base_title} (responsive + accessible)", 
-                   complexity=TaskComplexityLevel.LOW),
-        TaskEntity(title=f"Implement state management and data flow for {base_title}", 
-                   complexity=TaskComplexityLevel.MEDIUM),
-        TaskEntity(title=f"Add user interactions and event handlers for {base_title}", 
-                   complexity=TaskComplexityLevel.MEDIUM),
-        TaskEntity(title=f"Write component tests for {base_title}", 
-                   complexity=TaskComplexityLevel.MEDIUM),
-        TaskEntity(title=f"Accessibility review and fixes for {base_title}", 
-                   complexity=TaskComplexityLevel.LOW),
+        TaskEntity(title=f"Design {base_title} component hierarchy and props interface",
+                   metadata={"complexity": "simple", "category": "design"}),
+        TaskEntity(title=f"Implement {base_title} component structure and layout",
+                   metadata={"complexity": "moderate", "category": "frontend"}),
+        TaskEntity(title=f"Add styling for {base_title} (responsive + accessible)",
+                   metadata={"complexity": "simple", "category": "frontend"}),
+        TaskEntity(title=f"Implement state management and data flow for {base_title}",
+                   metadata={"complexity": "moderate", "category": "frontend"}),
+        TaskEntity(title=f"Add user interactions and event handlers for {base_title}",
+                   metadata={"complexity": "moderate", "category": "frontend"}),
+        TaskEntity(title=f"Write component tests for {base_title}",
+                   metadata={"complexity": "moderate", "category": "testing"}),
+        TaskEntity(title=f"Accessibility review and fixes for {base_title}",
+                   metadata={"complexity": "simple", "category": "accessibility"}),
     ]
 
 
@@ -125,20 +125,20 @@ def security_template(task: TaskEntity) -> List[TaskEntity]:
     """
     base_title = task.title.replace("Implement ", "").replace("Add ", "").replace("Create ", "")
     return [
-        TaskEntity(title=f"Threat model and requirements analysis for {base_title}", 
-                   complexity=TaskComplexityLevel.HIGH),
-        TaskEntity(title=f"Design authentication flow for {base_title}", 
-                   complexity=TaskComplexityLevel.MEDIUM),
-        TaskEntity(title=f"Implement authentication for {base_title} (login/register/token)", 
-                   complexity=TaskComplexityLevel.HIGH),
-        TaskEntity(title=f"Implement authorization and RBAC for {base_title}", 
-                   complexity=TaskComplexityLevel.HIGH),
-        TaskEntity(title=f"Add input sanitization and CSRF/XSS protection for {base_title}", 
-                   complexity=TaskComplexityLevel.MEDIUM),
-        TaskEntity(title=f"Security audit and penetration testing for {base_title}", 
-                   complexity=TaskComplexityLevel.HIGH),
-        TaskEntity(title=f"Write security-focused tests for {base_title}", 
-                   complexity=TaskComplexityLevel.MEDIUM),
+        TaskEntity(title=f"Threat model and requirements analysis for {base_title}",
+                   metadata={"complexity": "complex", "category": "security"}),
+        TaskEntity(title=f"Design authentication flow for {base_title}",
+                   metadata={"complexity": "moderate", "category": "security"}),
+        TaskEntity(title=f"Implement authentication for {base_title} (login/register/token)",
+                   metadata={"complexity": "complex", "category": "security"}),
+        TaskEntity(title=f"Implement authorization and RBAC for {base_title}",
+                   metadata={"complexity": "complex", "category": "security"}),
+        TaskEntity(title=f"Add input sanitization and CSRF/XSS protection for {base_title}",
+                   metadata={"complexity": "moderate", "category": "security"}),
+        TaskEntity(title=f"Security audit and penetration testing for {base_title}",
+                   metadata={"complexity": "complex", "category": "security"}),
+        TaskEntity(title=f"Write security-focused tests for {base_title}",
+                   metadata={"complexity": "moderate", "category": "testing"}),
     ]
 
 
@@ -149,18 +149,18 @@ def api_template(task: TaskEntity) -> List[TaskEntity]:
     """
     base_title = task.title.replace("Build ", "").replace("Create ", "").replace("API for ", "")
     return [
-        TaskEntity(title=f"Design {base_title} API specification", 
-                   complexity=TaskComplexityLevel.MEDIUM),
-        TaskEntity(title=f"Implement {base_title} request validation", 
-                   complexity=TaskComplexityLevel.MEDIUM),
-        TaskEntity(title=f"Implement {base_title} business logic", 
-                   complexity=TaskComplexityLevel.HIGH),
-        TaskEntity(title=f"Add {base_title} error handling", 
-                   complexity=TaskComplexityLevel.MEDIUM),
-        TaskEntity(title=f"Write {base_title} integration tests", 
-                   complexity=TaskComplexityLevel.MEDIUM),
-        TaskEntity(title=f"Document {base_title} API", 
-                   complexity=TaskComplexityLevel.LOW),
+        TaskEntity(title=f"Design {base_title} API specification",
+                   metadata={"complexity": "moderate", "category": "design"}),
+        TaskEntity(title=f"Implement {base_title} request validation",
+                   metadata={"complexity": "moderate", "category": "backend"}),
+        TaskEntity(title=f"Implement {base_title} business logic",
+                   metadata={"complexity": "complex", "category": "backend"}),
+        TaskEntity(title=f"Add {base_title} error handling",
+                   metadata={"complexity": "moderate", "category": "backend"}),
+        TaskEntity(title=f"Write {base_title} integration tests",
+                   metadata={"complexity": "moderate", "category": "testing"}),
+        TaskEntity(title=f"Document {base_title} API",
+                   metadata={"complexity": "simple", "category": "docs"}),
     ]
 
 
@@ -171,18 +171,18 @@ def refactor_template(task: TaskEntity) -> List[TaskEntity]:
     """
     base_title = task.title.replace("Refactor ", "").replace("Restructure ", "")
     return [
-        TaskEntity(title=f"Analyze {base_title} before refactor", 
-                   complexity=TaskComplexityLevel.MEDIUM),
-        TaskEntity(title=f"Write tests for {base_title} (safety net)", 
-                   complexity=TaskComplexityLevel.MEDIUM),
-        TaskEntity(title=f"Extract interfaces from {base_title}", 
-                   complexity=TaskComplexityLevel.HIGH),
-        TaskEntity(title=f"Migrate {base_title} to new structure", 
-                   complexity=TaskComplexityLevel.HIGH),
-        TaskEntity(title=f"Validate {base_title} after refactor", 
-                   complexity=TaskComplexityLevel.MEDIUM),
-        TaskEntity(title=f"Update documentation for {base_title}", 
-                   complexity=TaskComplexityLevel.LOW),
+        TaskEntity(title=f"Analyze {base_title} before refactor",
+                   metadata={"complexity": "moderate", "category": "analysis"}),
+        TaskEntity(title=f"Write tests for {base_title} (safety net)",
+                   metadata={"complexity": "moderate", "category": "testing"}),
+        TaskEntity(title=f"Extract interfaces from {base_title}",
+                   metadata={"complexity": "complex", "category": "refactoring"}),
+        TaskEntity(title=f"Migrate {base_title} to new structure",
+                   metadata={"complexity": "complex", "category": "refactoring"}),
+        TaskEntity(title=f"Validate {base_title} after refactor",
+                   metadata={"complexity": "moderate", "category": "validation"}),
+        TaskEntity(title=f"Update documentation for {base_title}",
+                   metadata={"complexity": "simple", "category": "docs"}),
     ]
 
 

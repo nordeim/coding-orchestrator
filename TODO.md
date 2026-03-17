@@ -1,7 +1,7 @@
 # Orchestrator Build — Progress Tracker
 
 > **Started:** 2026-03-16 10:25 SGT
-> **Updated:** 2026-03-17
+> **Updated:** 2026-03-17 09:30 SGT
 > **Status:** PHASE 7 COMPLETE ✅
 
 ---
@@ -37,8 +37,9 @@
 
 ## Phase 4: Decomposition ✅
 - [x] `tasks/decomposition.py` — TaskDecompositionService with strategies
-- [x] Templates embedded in decomposition.py (microservice, CRUD, UI, security)
-- [x] `tests/test_decomposition.py` — 21/21 ✅
+- [x] `tasks/templates.py` — **NEW**: TemplateRegistry with 6 templates (microservice, crud, ui_component, security, api, refactor)
+- [x] Integration: TemplateRegistry checks first, falls back to DEFAULT_RULES
+- [x] `tests/test_decomposition.py` — 21/21 ✅ (including dependency resolution)
 
 ## Phase 5: Recovery & Health ✅
 - [x] `recovery/checkpoint.py` — CheckpointMixin
@@ -53,12 +54,14 @@
 - [x] `examples/basic_usage.py` — Basic usage demo
 - [x] `examples/decompose_task.py` — Decomposition demo (with estimates)
 - [x] `examples/state_machine_demo.py` — State machine demo
-- [x] `README.md` — Updated documentation
+- [x] `skills/coding-orchestrator/SKILL.md` — Skill file for AI agent integration
+- [x] `README.md` — Updated with TemplateRegistry integration
 - [x] `AGENT_BRIEF.md` — Single-source-of-truth for AI agents
 
 ---
 
 ## Tests Summary
+
 | Module | Tests | Status |
 |--------|-------|--------|
 | `test_states.py` | 19 | ✅ |
@@ -76,7 +79,7 @@
 ```bash
 # Run tests
 source /opt/venv/bin/activate
-python3 -m pytest orchestrator/tests/ -v
+PYTHONPATH=/home/pete/.openclaw/workspace python3 -m pytest orchestrator/tests/ -v
 
 # Run examples
 python3 orchestrator/examples/decompose_task.py
@@ -86,12 +89,26 @@ python3 orchestrator/examples/basic_usage.py
 
 ---
 
-## Notes
+## TemplateRegistry Integration (2026-03-17)
 
-- Templates are embedded in `decomposition.py` (not separate `templates.py` file)
-- Tests for checkpoint and health combined into `test_recovery.py`
-- All examples use `sys.path.insert(0, "..", "..")` for imports
-- LSP type warnings are cosmetic — all tests pass
+The decomposition service now uses a two-tier template system:
+
+1. **TemplateRegistry** (`tasks/templates.py`) — First priority
+   - 6 templates: microservice, crud, ui_component, security, api, refactor
+   - Each template returns `List[TaskEntity]` directly
+   - Sequential dependencies automatically added
+
+2. **DEFAULT_RULES** (`tasks/decomposition.py`) — Fallback
+   - Uses `SubtaskSpec` intermediate format
+   - Complex dependency resolution
+
+**Usage:**
+```python
+from orchestrator.tasks.decomposition import TaskDecompositionService
+
+decomposer = TaskDecompositionService()
+print(decomposer.available_templates())  # ['microservice', 'crud', ...]
+```
 
 ---
 
