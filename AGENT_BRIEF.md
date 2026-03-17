@@ -382,16 +382,22 @@ This toolkit is a **distillation** of `/home/project/opencode-industrial-orchest
 
 ```python
 from orchestrator.tasks.entity import TaskEntity, TaskPriority, TaskEstimate
+from orchestrator.tasks.complexity import ComplexityAnalyzer
 from orchestrator.tasks.decomposition import TaskDecompositionService
 from orchestrator.storage.json_store import JsonStore
 
-# Create and decompose a complex task
+# Create a complex task
 task = TaskEntity(
     title="Build user authentication microservice",
     description="OAuth2 + JWT authentication with refresh tokens",
     priority=TaskPriority.HIGH,
 )
 
+# Analyze complexity to set an estimate (required for decomposition)
+analyzer = ComplexityAnalyzer()
+task.estimate = analyzer.analyze(task.description, task.title).estimate
+
+# Decompose
 decomposer = TaskDecompositionService()
 result = decomposer.decompose(task)
 

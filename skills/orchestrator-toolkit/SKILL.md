@@ -51,7 +51,8 @@ decomposer = TaskDecompositionService()
 print(decomposer.available_templates())
 # Output: ['microservice', 'crud', 'ui_component', 'security', 'api', 'refactor']
 
-subtasks = decomposer.decompose(task, strategy="template", template_name="crud")
+result = decomposer.decompose(task)
+subtasks = task.children
 
 # Persist to storage
 store = JsonStore("./tasks.json")

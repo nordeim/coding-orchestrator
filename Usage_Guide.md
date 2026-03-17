@@ -456,7 +456,7 @@ except Exception as e:
     # workflow.resume_from_last()
 ```
 
-### Step 7: Save and Restore
+### 7. Save and Restore
 
 ```python
 from orchestrator.storage.json_store import JsonStore
@@ -469,9 +469,15 @@ store.save(task)
 loaded = store.load(str(task.id))
 if loaded:
     print(f"Restored: {loaded.title}")
-    print(f"Status: {loaded.status}")
-    print(f"Children: {len(loaded.children)}")
 ```
+
+#### Limitations & Important Notes ⚠️
+
+The `JsonStore` is a lightweight serialization layer with specific design choices:
+
+1.  **Status is NOT Restored**: Deserialized tasks always start in the `"pending"` state. To resume work, you must manually call the state machine API (e.g., `loaded.start()` or use checkpoints).
+2.  **Hierarchy is Flat on Load**: While `JsonStore` saves child relationships, it does not automatically re-hydrate the `children` list with actual `TaskEntity` objects. It populates `_stored_children_ids`. You must manually load and link children if the full object tree is required in memory.
+3.  **No Concurrency**: `JsonStore` is not thread-safe and is designed for single-user, single-process workloads.
 
 ---
 
